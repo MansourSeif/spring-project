@@ -1,4 +1,4 @@
-# 🚀 Simple Spring Boot CI/CD Pipeline
+# Spring Boot CI/CD Pipeline
 
 A complete CI/CD pipeline project using:
 
@@ -14,7 +14,7 @@ This project demonstrates how to automate the software delivery lifecycle from s
 
 ---
 
-# 📌 Project Overview
+#  Project Overview
 
 This project showcases a complete DevOps workflow where:
 
@@ -28,9 +28,9 @@ This project showcases a complete DevOps workflow where:
 
 ---
 
-# 🏗️ Architecture
+# Architecture
 
-```text
+```
 Developer
    ↓
 GitHub Repository
@@ -47,7 +47,7 @@ Jenkins Pipeline
 
 ---
 
-# 🚀 Technologies Used
+# Technologies Used
 
 | Technology | Purpose |
 |---|---|
@@ -63,15 +63,15 @@ Jenkins Pipeline
 
 ---
 
-# ⚙️ CI/CD Pipeline Workflow
+# CI/CD Pipeline Workflow
 
 ---
 
-## 1️⃣ GitHub Source Code
+## GitHub Source Code
 
 The developer pushes code to GitHub:
 
-```bash
+```
 git add .
 git commit -m "Update project"
 git push origin main
@@ -79,17 +79,17 @@ git push origin main
 
 ---
 
-## 2️⃣ Jenkins Pulls the Repository
+## Jenkins Pulls the Repository
 
 Jenkins automatically pulls the latest code from GitHub.
 
 ---
 
-## 3️⃣ Build Stage
+## Build Stage
 
 Jenkins executes:
 
-```bash
+```
 mvn clean compile
 ```
 
@@ -101,11 +101,11 @@ This stage:
 
 ---
 
-## 4️⃣ Test Stage
+## Test Stage
 
 Jenkins runs:
 
-```bash
+```
 mvn test
 ```
 
@@ -113,11 +113,11 @@ This executes all JUnit tests.
 
 ---
 
-## 5️⃣ SonarQube Analysis
+## SonarQube Analysis
 
 Jenkins sends the project to SonarQube:
 
-```bash
+```
 mvn sonar:sonar
 ```
 
@@ -131,27 +131,27 @@ SonarQube analyzes:
 
 ---
 
-## 6️⃣ Package Stage
+## Package Stage
 
 Maven packages the application:
 
-```bash
+```
 mvn package
 ```
 
 Generated artifact:
 
-```text
+```
 target/demo-0.0.1-SNAPSHOT.jar
 ```
 
 ---
 
-## 7️⃣ Deploy to Nexus
+## Deploy to Nexus
 
 Jenkins uploads the artifact to Nexus:
 
-```bash
+```
 mvn deploy
 ```
 
@@ -162,7 +162,7 @@ Artifacts are stored inside:
 
 ---
 
-# 🔍 SonarQube Integration
+# SonarQube Integration
 
 ---
 
@@ -182,7 +182,7 @@ It detects:
 
 ## Run SonarQube with Docker
 
-```bash
+```
 docker run -d \
 --name sonarqube \
 -p 9000:9000 \
@@ -202,13 +202,13 @@ http://192.168.100.10:9000
 
 Username:
 
-```text
+```
 admin
 ```
 
 Password:
 
-```text
+```
 admin
 ```
 
@@ -218,7 +218,7 @@ admin
 
 Go to:
 
-```text
+```
 Manage Jenkins → System → SonarQube Servers
 ```
 
@@ -234,12 +234,12 @@ Add:
 
 ## Generate SonarQube Token
 
-```text
+```
 My Account → Security → Generate Tokens
 ```
 ---
 
-# 📦 Nexus Repository Integration
+# Nexus Repository Integration
 
 ---
 
@@ -256,7 +256,7 @@ Nexus Repository Manager is used to:
 
 ## Run Nexus with Docker
 
-```bash
+```
 docker run -d \
 --name nexus \
 -p 8081:8081 \
@@ -267,7 +267,7 @@ sonatype/nexus3
 
 ## Access Nexus
 
-```text
+```
 http://192.168.100.10:8081
 ```
 
@@ -275,19 +275,19 @@ http://192.168.100.10:8081
 
 ## Retrieve Nexus Admin Password
 
-```bash
+```
 docker exec -it nexus cat /nexus-data/admin.password
 ```
 
 ---
 
-# 📦 Maven Configuration
+# Maven Configuration
 
 ---
 
 ## pom.xml
 
-```xml
+```
 <distributionManagement>
 
     <repository>
@@ -311,11 +311,11 @@ docker exec -it nexus cat /nexus-data/admin.password
 
 ---
 
-# 🔐 Maven Authentication
+# Maven Authentication
 
 Credentials are stored inside:
 
-```text
+```
 /var/jenkins_home/.m2/settings.xml
 ```
 
@@ -323,7 +323,7 @@ Credentials are stored inside:
 
 ## settings.xml
 
-```xml
+```
 <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
@@ -343,13 +343,13 @@ Credentials are stored inside:
 ```
 ---
 
-# 🌱 Spring Boot Application
+# Spring Boot Application
 
 ---
 
 ## DemoApplication.java
 
-```java
+```
 package com.example.demo;
 
 import org.springframework.boot.SpringApplication;
@@ -367,7 +367,7 @@ public class DemoApplication {
 
 ---
 
-# 📜 Jenkinsfile
+# Jenkinsfile
 
 ```
 pipeline {
@@ -418,7 +418,7 @@ pipeline {
 
 ---
 
-# 🐳 Docker Containers Used
+# Docker Containers Used
 
 | Container | Port |
 |---|---|
@@ -429,7 +429,7 @@ pipeline {
 
 ---
 
-# 📸 Screenshots
+#  Screenshots
 
 ---
 
