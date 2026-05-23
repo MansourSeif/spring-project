@@ -457,3 +457,9 @@ pipeline {
 <img width="1547" height="923" alt="image" src="https://github.com/user-attachments/assets/9ece33ab-1bcf-4993-ae7d-396e25f43c2b" />
 <img width="1527" height="910" alt="image" src="https://github.com/user-attachments/assets/36be166a-e0fa-4f36-bcfe-3c82334688d8" />
 
+---
+
+#  Sources 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/rj1ztgkIN5M?si=hEgrJLADwEd0QwIM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+https://dev.to/creativeconversations/jenkins-cicd-freestyle-project-a-comprehensive-guide-43c4 
