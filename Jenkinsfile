@@ -1,6 +1,7 @@
 pipeline {
 
     agent any
+	stages {
 
         stage('Build') {
             steps {
@@ -33,4 +34,5 @@ pipeline {
                 sh 'mvn deploy'
             }
         }
+    }	
 }
