@@ -460,6 +460,7 @@ pipeline {
 ---
 
 #  Sources 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/rj1ztgkIN5M?si=hEgrJLADwEd0QwIM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+https://www.youtube.com/embed/rj1ztgkIN5M?si=hEgrJLADwEd0QwIM
 
 https://dev.to/creativeconversations/jenkins-cicd-freestyle-project-a-comprehensive-guide-43c4 
