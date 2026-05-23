@@ -52,7 +52,7 @@ Jenkins Pipeline
 | Technology | Purpose |
 |---|---|
 | Java 17 | Programming Language |
-| Spring Boot 4 | Backend Framework |
+| Spring Boot | Backend Framework |
 | Maven | Build Automation |
 | Jenkins | CI/CD Automation |
 | SonarQube | Static Code Analysis |
@@ -60,35 +60,10 @@ Jenkins Pipeline
 | Docker | Containerization |
 | GitHub | Version Control |
 
----
-
-# 📁 Project Structure
-
-```text
-simple-demo/
-│
-├── Jenkinsfile
-├── pom.xml
-├── README.md
-│
-└── src
-    ├── main
-    │   ├── java
-    │   │   └── com/example/demo
-    │   │       ├── DemoApplication.java
-    │   │       └── HelloController.java
-    │   │
-    │   └── resources
-    │       └── application.properties
-    │
-    └── test
-        └── java/com/example/demo
-            └── DemoApplicationTests.java
-```
 
 ---
 
-# ⚙️ How the Pipeline Works
+# ⚙️ CI/CD Pipeline Workflow
 
 ---
 
@@ -106,7 +81,7 @@ git push origin main
 
 ## 2️⃣ Jenkins Pulls the Repository
 
-Jenkins connects to GitHub and downloads the latest source code.
+Jenkins automatically pulls the latest code from GitHub.
 
 ---
 
@@ -167,7 +142,7 @@ mvn package
 Generated artifact:
 
 ```text
-target/simple-demo-0.0.1-SNAPSHOT.jar
+target/demo-0.0.1-SNAPSHOT.jar
 ```
 
 ---
@@ -187,15 +162,199 @@ Artifacts are stored inside:
 
 ---
 
+# 🔍 SonarQube Integration
+
+---
+
+## What is SonarQube?
+
+SonarQube is a static code analysis platform used to inspect code quality and security vulnerabilities.
+
+It detects:
+
+- Bugs
+- Vulnerabilities
+- Code smells
+- Security issues
+- Technical debt
+
+---
+
+## Run SonarQube with Docker
+
+```bash
+docker run -d \
+--name sonarqube \
+-p 9000:9000 \
+sonarqube:lts-community
+```
+
+---
+
+## Access SonarQube
+
+```text
+http://192.168.100.10:9000
+```
+---
+
+## Default Credentials
+
+Username:
+
+```text
+admin
+```
+
+Password:
+
+```text
+admin
+```
+
+---
+
+## Configure SonarQube in Jenkins
+
+Go to:
+
+```text
+Manage Jenkins → System → SonarQube Servers
+```
+
+Add:
+
+| Field | Value |
+|---|---|
+| Name | sonarqube |
+| Server URL | http://192.168.100.10:9000 |
+| Authentication Token | Generated Token |
+
+---
+
+## Generate SonarQube Token
+
+```text
+My Account → Security → Generate Tokens
+```
+---
+
+# 📦 Nexus Repository Integration
+
+---
+
+## What is Nexus?
+
+Nexus Repository Manager is used to:
+
+- Store Maven artifacts
+- Manage dependencies
+- Host private repositories
+- Centralize binary storage
+
+---
+
+## Run Nexus with Docker
+
+```bash
+docker run -d \
+--name nexus \
+-p 8081:8081 \
+sonatype/nexus3
+```
+
+---
+
+## Access Nexus
+
+```text
+http://192.168.100.10:8081
+```
+
+---
+
+## Retrieve Nexus Admin Password
+
+```bash
+docker exec -it nexus cat /nexus-data/admin.password
+```
+
+---
+
+# 📦 Maven Configuration
+
+---
+
+## pom.xml
+
+```xml
+<distributionManagement>
+
+    <repository>
+        <id>nexus</id>
+        <name>Nexus Releases</name>
+        <url>
+            http://192.168.100.10:8081/repository/maven-releases/
+        </url>
+    </repository>
+
+    <snapshotRepository>
+        <id>nexus</id>
+        <name>Nexus Snapshots</name>
+        <url>
+            http://192.168.100.10:8081/repository/maven-snapshots/
+        </url>
+    </snapshotRepository>
+
+</distributionManagement>
+```
+
+---
+
+# 🔐 Maven Authentication
+
+Credentials are stored inside:
+
+```text
+/var/jenkins_home/.m2/settings.xml
+```
+
+---
+
+## settings.xml
+
+```xml
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+          https://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+    <servers>
+
+        <server>
+            <id>nexus</id>
+            <username>admin</username>
+            <password>nexus123</password>
+        </server>
+
+    </servers>
+
+</settings>
+```
+---
+
 # 🌱 Spring Boot Application
 
 ---
 
 ## DemoApplication.java
 
-Main entry point:
-
 ```java
+package com.example.demo;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
 @SpringBootApplication
 public class DemoApplication {
 
@@ -208,91 +367,9 @@ public class DemoApplication {
 
 ---
 
-## HelloController.java
-
-Simple REST endpoint:
-
-```java
-@RestController
-public class HelloController {
-
-    @GetMapping("/")
-    public String hello() {
-        return "Hello Jenkins Nexus SonarQube";
-    }
-
-}
-```
-
----
-
-# 📦 Maven Configuration
-
-The `pom.xml` contains:
-
-- Dependencies
-- Plugins
-- Nexus deployment configuration
-
----
-
-## Distribution Management
-
-```xml
-<distributionManagement>
-
-    <repository>
-        <id>nexus</id>
-        <url>http://YOUR_SERVER_IP:8081/repository/maven-releases/</url>
-    </repository>
-
-    <snapshotRepository>
-        <id>nexus</id>
-        <url>http://YOUR_SERVER_IP:8081/repository/maven-snapshots/</url>
-    </snapshotRepository>
-
-</distributionManagement>
-```
-
----
-
-# 🔐 Maven Authentication
-
-Maven credentials are stored inside:
-
-```text
-/var/jenkins_home/.m2/settings.xml
-```
-
----
-
-## settings.xml
-
-```xml
-<settings>
-
-    <servers>
-
-        <server>
-            <id>nexus</id>
-            <username>admin</username>
-            <password>YOUR_PASSWORD</password>
-        </server>
-
-    </servers>
-
-</settings>
-```
-
-⚠️ Important:
-
-The `<id>` in `settings.xml` MUST match the `<id>` in `pom.xml`.
-
----
-
 # 📜 Jenkinsfile
 
-```groovy
+```
 pipeline {
 
     agent any
@@ -341,172 +418,14 @@ pipeline {
 
 ---
 
-# 📦 Nexus Repository Manager
-
----
-
-## What is Nexus?
-
-Nexus is an artifact repository manager used to:
-
-- Store build artifacts
-- Manage dependencies
-- Host Maven repositories
-- Centralize binary management
-
----
-
-## Run Nexus with Docker
-
-```bash
-docker run -d \
---name nexus \
--p 8081:8081 \
-sonatype/nexus3
-```
-
----
-
-## Access Nexus
-
-```text
-http://YOUR_SERVER_IP:8081
-```
-
----
-
-## Nexus Default Credentials
-
-Username:
-
-```text
-admin
-```
-
-Retrieve password:
-
-```bash
-docker exec -it nexus cat /nexus-data/admin.password
-```
-
----
-
-# 🔍 SonarQube
-
----
-
-## What is SonarQube?
-
-SonarQube is a code quality inspection platform.
-
-It detects:
-
-- Bugs
-- Vulnerabilities
-- Code smells
-- Security risks
-- Technical debt
-
----
-
-## Run SonarQube with Docker
-
-```bash
-docker run -d \
---name sonarqube \
--p 9000:9000 \
-sonarqube:lts-community
-```
-
----
-
-## Access SonarQube
-
-```text
-http://YOUR_SERVER_IP:9000
-```
-
----
-
-## Default Credentials
-
-Username:
-
-```text
-admin
-```
-
-Password:
-
-```text
-admin
-```
-
----
-
 # 🐳 Docker Containers Used
 
 | Container | Port |
 |---|---|
-| Jenkins | 8080 |
+| Jenkins | 9090 |
 | Nexus | 8081 |
 | SonarQube | 9000 |
 
----
-
-# ▶️ Running the Application Locally
-
----
-
-## Clone Repository
-
-```bash
-git clone https://github.com/YOUR_USERNAME/simple-demo.git
-```
-
----
-
-## Navigate to Project
-
-```bash
-cd simple-demo
-```
-
----
-
-## Build Project
-
-```bash
-mvn clean install
-```
-
----
-
-## Run Application
-
-```bash
-mvn spring-boot:run
-```
-
-Application URL:
-
-```text
-http://localhost:8080
-```
-
----
-
-# 🌐 API Endpoint
-
-| Method | Endpoint | Description |
-|---|---|---|
-| GET | `/` | Returns welcome message |
-
-Example response:
-
-```text
-Hello Jenkins Nexus SonarQube
-```
 
 ---
 
@@ -516,144 +435,25 @@ Hello Jenkins Nexus SonarQube
 
 ## Jenkins Pipeline
 
-> Add screenshot here
+<img width="1495" height="893" alt="image" src="https://github.com/user-attachments/assets/a092333a-4dfd-4355-8f94-6c9821ba87c7" />
 
-```text
-docs/images/jenkins-pipeline.png
-```
 
 ---
 
 ## SonarQube Dashboard
-
-> Add screenshot here
-
-```text
-docs/images/sonarqube-dashboard.png
-```
+<img width="1651" height="921" alt="image" src="https://github.com/user-attachments/assets/eb7d20e4-46e8-4f43-8c0c-5c395aed4984" />
 
 ---
 
 ## Nexus Repository
 
-> Add screenshot here
+<img width="1782" height="912" alt="image" src="https://github.com/user-attachments/assets/b3c78b52-0683-4c20-9412-da370b69edee" />
+<img width="1616" height="840" alt="image" src="https://github.com/user-attachments/assets/264ed7e3-a423-4d45-907b-90808ae35593" />
 
-```text
-docs/images/nexus-dashboard.png
-```
 
 ---
 
 ## Successful Build
+<img width="1547" height="923" alt="image" src="https://github.com/user-attachments/assets/9ece33ab-1bcf-4993-ae7d-396e25f43c2b" />
+<img width="1527" height="910" alt="image" src="https://github.com/user-attachments/assets/36be166a-e0fa-4f36-bcfe-3c82334688d8" />
 
-> Add screenshot here
-
-```text
-docs/images/build-success.png
-```
-
----
-
-# 🛠️ Common Issues
-
----
-
-## 401 Unauthorized
-
-Cause:
-
-- Wrong Nexus credentials
-- Mismatched repository IDs
-
-Fix:
-
-Ensure:
-
-```xml
-<id>nexus</id>
-```
-
-matches in:
-
-- `pom.xml`
-- `settings.xml`
-
----
-
-## SonarQube Connection Failed
-
-Verify:
-
-```bash
-docker ps
-```
-
-Make sure SonarQube container is running.
-
----
-
-## Nexus Not Reachable
-
-Verify Nexus container:
-
-```bash
-docker ps
-```
-
----
-
-# 📚 Learning Objectives
-
-This project demonstrates:
-
-- CI/CD pipeline creation
-- Jenkins automation
-- Maven builds
-- SonarQube integration
-- Nexus deployment
-- Spring Boot packaging
-- Docker container usage
-
----
-
-# 🔮 Future Improvements
-
-Possible future enhancements:
-
-- Dockerize Spring Boot app
-- Kubernetes deployment
-- GitHub Webhooks
-- Slack notifications
-- Prometheus monitoring
-- Terraform infrastructure
-- Automated production deployment
-
----
-
-# ✅ Final Result
-
-At the end of the pipeline:
-
-✔ Source code validated  
-✔ Tests executed  
-✔ Code quality analyzed  
-✔ JAR packaged  
-✔ Artifact deployed to Nexus  
-
----
-
-# 👨‍💻 Author
-
-Your Name Here
-
-GitHub:
-
-```text
-https://github.com/YOUR_USERNAME
-```
-
----
-
-# 📄 License
-
-This project is for educational and DevOps learning purposes.
