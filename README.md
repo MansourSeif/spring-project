@@ -464,3 +464,5 @@ pipeline {
 https://www.youtube.com/embed/rj1ztgkIN5M?si=hEgrJLADwEd0QwIM
 
 https://dev.to/creativeconversations/jenkins-cicd-freestyle-project-a-comprehensive-guide-43c4 
+
+https://chatgpt.com/share/6a117a2c-89b4-83ea-8d5e-1a4a79e22d46
